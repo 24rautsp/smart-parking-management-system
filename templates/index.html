@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Parking Management System | DSA Project</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Top Navigation Header -->
+    <header class="app-header">
+        <div class="header-container">
+            <div class="brand">
+                <div class="brand-icon">🅿️</div>
+                <div>
+                    <h1>Smart Parking Management System</h1>
+                    <p class="subtitle">Data Structures &amp; Algorithms (DSA) College Project</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button id="btnDsaModal" class="btn btn-outline" title="View DSA Concepts and Big-O Complexity">
+                    📚 DSA Architecture
+                </button>
+                <button id="btnResetModal" class="btn btn-outline" title="Reset Parking Lot configuration">
+                    ⚙️ Reconfigure Lot
+                </button>
+                <a href="https://github.com/24rautsp/smart-parking-management-system" target="_blank" rel="noopener" class="btn btn-github">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                    GitHub Repo
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-container">
+
+        <!-- Live Statistics Bar -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-label">Total Capacity</span>
+                    <span class="dsa-tag tag-array">Array</span>
+                </div>
+                <div class="stat-value" id="statCapacity">--</div>
+                <div class="stat-sub" id="statRate">Rate: Rs. --/hr</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-label">Occupied Slots</span>
+                    <span class="dsa-tag tag-hash">Hash Map</span>
+                </div>
+                <div class="stat-value text-danger" id="statOccupied">--</div>
+                <div class="stat-sub">Active in parking lot</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-label">Available Slots</span>
+                    <span class="dsa-tag tag-array">Linear Search</span>
+                </div>
+                <div class="stat-value text-success" id="statAvailable">--</div>
+                <div class="stat-sub">Ready to assign</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-label">Waiting Queue</span>
+                    <span class="dsa-tag tag-queue">Queue (FIFO)</span>
+                </div>
+                <div class="stat-value text-warning" id="statWaiting">--</div>
+                <div class="stat-sub">Overflow vehicles</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-label">Total Completed</span>
+                    <span class="dsa-tag tag-list">Linked List</span>
+                </div>
+                <div class="stat-value" id="statHistoryCount">--</div>
+                <div class="stat-sub">Past exited vehicles</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-label">Revenue Collected</span>
+                    <span class="dsa-tag tag-math">Bill Formula</span>
+                </div>
+                <div class="stat-value text-accent" id="statRevenue">Rs. 0.00</div>
+                <div class="stat-sub">Ceil(hours) × Rate</div>
+            </div>
+        </section>
+
+        <!-- Quick Operations Grid -->
+        <section class="actions-grid">
+            <!-- 1. Park Vehicle Form -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>🚗 Park a Vehicle</h2>
+                    <span class="dsa-tag tag-linear">Auto-Assign O(N)</span>
+                </div>
+                <p class="card-desc">Assigns the first available slot via Linear Search. If full, enqueues to FIFO line.</p>
+                <form id="formPark" class="action-form">
+                    <div class="form-group">
+                        <label for="parkVehicleNumber">Registration Number</label>
+                        <input type="text" id="parkVehicleNumber" placeholder="e.g. MH03EF9999" required autocomplete="off">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">
+                        🅿️ Park Vehicle (Auto Slot)
+                    </button>
+                </form>
+            </div>
+
+            <!-- 2. Exit Vehicle Form -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>🏁 Exit Vehicle &amp; Calculate Fee</h2>
+                    <span class="dsa-tag tag-hash">Hash Map O(1)</span>
+                </div>
+                <p class="card-desc">Frees the slot, computes fee, adds to History, and hands slot to next waiting car.</p>
+                <form id="formExit" class="action-form">
+                    <div class="form-row">
+                        <div class="form-group flex-2">
+                            <label for="exitVehicleNumber">Vehicle Number</label>
+                            <input type="text" id="exitVehicleNumber" placeholder="e.g. MH03EF9999" required autocomplete="off">
+                        </div>
+                        <div class="form-group flex-1">
+                            <label for="exitSimulatedHours" title="Override real clock with custom hours for viva demo">
+                                Duration (Hours) <span class="badge-viva">Viva Mode</span>
+                            </label>
+                            <input type="number" id="exitSimulatedHours" step="0.5" min="0" placeholder="e.g. 2.5">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-secondary btn-block">
+                        🧾 Exit &amp; Generate Bill
+                    </button>
+                </form>
+            </div>
+
+            <!-- 3. Undo & Quick Controls -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>↩️ Undo Last Entry</h2>
+                    <span class="dsa-tag tag-stack">Stack (LIFO)</span>
+                </div>
+                <p class="card-desc">Reverts the most recent vehicle entry using our custom linked LIFO Action Stack.</p>
+                <div class="undo-box">
+                    <button id="btnUndo" class="btn btn-warning btn-block">
+                        ⏮️ Rollback Last Parking Operation
+                    </button>
+                    <p class="small-tip">💡 Uses <code>ActionStack.pop()</code> in O(1) time.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Visual Parking Lot Slots Layout -->
+        <section class="card section-slots">
+            <div class="card-header">
+                <div>
+                    <h2>🏢 Visual Parking Lot Layout</h2>
+                    <p class="card-desc">Array of physical bays: <span class="text-success font-bold">Green = Available</span>, <span class="text-danger font-bold">Red = Occupied</span></p>
+                </div>
+                <div class="legend">
+                    <span class="legend-item"><span class="legend-dot dot-available"></span> Available</span>
+                    <span class="legend-item"><span class="legend-dot dot-occupied"></span> Occupied</span>
+                </div>
+            </div>
+            <div class="slots-grid" id="slotsContainer">
+                <!-- Dynamically populated slots -->
+            </div>
+        </section>
+
+        <!-- Waiting Queue Section -->
+        <section class="card section-queue">
+            <div class="card-header">
+                <div>
+                    <h2>⏳ Waiting Queue (Overflow Vehicles)</h2>
+                    <p class="card-desc">Custom FIFO Queue implemented using linked nodes (front/rear pointers). Front vehicle is automatically allotted the next vacated slot.</p>
+                </div>
+                <span class="dsa-tag tag-queue">O(1) Enqueue / Dequeue</span>
+            </div>
+            <div id="queueContainer" class="queue-display">
+                <!-- Dynamically populated waiting queue -->
+            </div>
+        </section>
+
+        <!-- Search Vehicle Section -->
+        <section class="card section-search">
+            <div class="card-header">
+                <div>
+                    <h2>🔍 Multi-Tier Vehicle Search</h2>
+                    <p class="card-desc">Checks Active Hash Map O(1), Waiting Queue O(M), and Completed Linked List History O(K).</p>
+                </div>
+                <span class="dsa-tag tag-search">Multi-Tier Search</span>
+            </div>
+            <form id="formSearch" class="search-form">
+                <input type="text" id="searchQuery" placeholder="Enter vehicle registration number to search..." required autocomplete="off">
+                <button type="submit" class="btn btn-primary">Search Vehicle</button>
+                <button type="button" id="btnClearSearch" class="btn btn-outline">Clear</button>
+            </form>
+            <div id="searchResults" class="search-results-box" style="display: none;"></div>
+        </section>
+
+        <!-- Completed Parking History with Custom Insertion Sort -->
+        <section class="card section-history">
+            <div class="card-header flex-between">
+                <div>
+                    <h2>📜 Completed Parking History</h2>
+                    <p class="card-desc">Stored in a Singly Linked List and ordered on-demand using custom Insertion Sort.</p>
+                </div>
+                <div class="sort-controls">
+                    <label for="sortKey">Sort By (Insertion Sort):</label>
+                    <select id="sortKey" class="select-input">
+                        <option value="fee-desc" selected>Fee: Highest to Lowest</option>
+                        <option value="fee-asc">Fee: Lowest to Highest</option>
+                        <option value="duration-desc">Duration: Longest to Shortest</option>
+                        <option value="duration-asc">Duration: Shortest to Longest</option>
+                        <option value="vehicle-asc">Vehicle Number (A-Z)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Vehicle Number</th>
+                            <th>Slot #</th>
+                            <th>Duration (hrs)</th>
+                            <th>Total Fee</th>
+                            <th>Entry Time</th>
+                            <th>Exit Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyTableBody">
+                        <tr>
+                            <td colspan="7" class="text-center text-muted">No completed parking sessions yet.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <p>Smart Parking Management System &bull; College DSA Project &bull; Created with Python, Flask, HTML, CSS &amp; JavaScript</p>
+        <p class="footer-links">
+            <a href="https://github.com/24rautsp/smart-parking-management-system" target="_blank" rel="noopener">GitHub: 24rautsp/smart-parking-management-system</a>
+        </p>
+    </footer>
+
+    <!-- Receipt Modal -->
+    <div id="receiptModal" class="modal-backdrop">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>🧾 Parking Receipt &amp; Bill</h3>
+                <button class="modal-close" id="btnCloseReceipt">&times;</button>
+            </div>
+            <div class="modal-body" id="receiptContent">
+                <!-- Receipt details rendered here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="btnPrintReceipt" onclick="window.print()">🖨️ Print Receipt</button>
+                <button class="btn btn-secondary" id="btnCloseReceiptBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reconfigure Parking Lot Modal -->
+    <div id="resetModal" class="modal-backdrop">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>⚙️ Reconfigure Parking Lot</h3>
+                <button class="modal-close" id="btnCloseReset">&times;</button>
+            </div>
+            <form id="formResetLot">
+                <div class="modal-body">
+                    <p class="text-muted mb-3">Re-initialize the parking lot with a custom capacity and rate (ideal for testing edge cases in your viva):</p>
+                    <div class="form-group">
+                        <label for="newCapacity">Total Slot Capacity (1-50):</label>
+                        <input type="number" id="newCapacity" value="6" min="1" max="50" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newHourlyRate">Hourly Rate (Rs.):</label>
+                        <input type="number" id="newHourlyRate" value="20" min="0" step="1" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Apply Configuration</button>
+                    <button type="button" class="btn btn-secondary" id="btnCancelReset">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- DSA Concepts Modal -->
+    <div id="dsaModal" class="modal-backdrop">
+        <div class="modal-card modal-lg">
+            <div class="modal-header">
+                <h3>📚 DSA Concepts &amp; Big-O Complexity Mapping</h3>
+                <button class="modal-close" id="btnCloseDsa">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-3">This project implements fundamental Data Structures and Algorithms without relying on high-level framework abstractions:</p>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Data Structure / Algorithm</th>
+                                <th>Where Used</th>
+                                <th>Time Complexity</th>
+                                <th>Space Complexity</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dsaTableBody">
+                            <!-- Populated via API -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="btnCloseDsaBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
