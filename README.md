@@ -26,6 +26,9 @@ Here are the live application outputs from the interactive web interface:
 ### 3. FIFO Waiting Queue, Multi-Tier Search & Completed History
 ![Waiting Queue and History](output-screenshots/output_screenshot_3.png)
 
+### 4. Parking Receipt, Fee Calculation & Automatic Queue Handover
+![Parking Receipt and Queue Handover](output-screenshots/output_screenshot_4.png)
+
 ---
 
 ## ⚠️ Important Note: PowerShell & Python Execution
