@@ -13,6 +13,21 @@ Manage parking slots, real-time vehicle entry/exit, fee billing, FIFO overflow q
 
 ---
 
+## 📸 Output Screenshots
+
+Here are the live application outputs from the interactive web interface:
+
+### 1. Dashboard Overview & Active Operations
+![Dashboard Overview](output-screenshots/output_screenshot_1.png)
+
+### 2. Visual Parking Lot Layout (Array of Slots)
+![Visual Parking Lot Layout](output-screenshots/output_screenshot_2.png)
+
+### 3. FIFO Waiting Queue, Multi-Tier Search & Completed History
+![Waiting Queue and History](output-screenshots/output_screenshot_3.png)
+
+---
+
 ## ⚠️ Important Note: PowerShell & Python Execution
 
 ### Why did you see `"from keyword is not supported in this version of the language"`?
